@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jerry Olalo — UI/UX Designer & Web Developer</title>
+<meta name="description" content="Portfolio of Jerry Olalo, a UI/UX designer and front-end developer from Tawid, Candijay, Bohol. Founder of Olalo Studio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: #111;
+    --line: #232323;
+    --text: #f2f2f2;
+    --muted: #8c8c8c;
+    --display: "Unbounded", system-ui, sans-serif;
+    --body: "Space Grotesk", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 var(--body);
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+  section { padding: 110px 0; scroll-margin-top: 60px; }
+  .eyebrow { font-size: 13px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); }
+  h2 { font: 700 clamp(28px, 5vw, 44px)/1.1 var(--display); margin: 12px 0 14px; }
+  .center { text-align: center; }
+  .lead { color: var(--muted); max-width: 560px; }
+  .center .lead { margin-inline: auto; }
+
+  /* intro */
+  #intro {
+    position: fixed; inset: 0; z-index: 50; background: #000;
+    display: grid; place-content: center; justify-items: center; gap: 22px;
+    transition: opacity .6s ease, visibility .6s;
+  }
+  #intro.done { opacity: 0; visibility: hidden; }
+  #intro .icons { display: flex; gap: 14px; }
+  #intro .icons span {
+    width: 44px; height: 44px; border: 1px solid #333; border-radius: 50%;
+    display: grid; place-items: center; opacity: 0; animation: up .5s ease forwards;
+  }
+  #intro .icons span:nth-child(2) { animation-delay: .12s; }
+  #intro .icons span:nth-child(3) { animation-delay: .24s; }
+  #intro h1 { font: 700 clamp(34px, 7vw, 64px) var(--display); opacity: 0; animation: up .7s .4s ease forwards; }
+  #intro p { color: var(--muted); font-size: 14px; opacity: 0; animation: up .7s .6s ease forwards; }
+  @keyframes up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* nav */
+  header {
+    position: fixed; top: 0; inset-inline: 0; z-index: 20;
+    background: rgba(10,10,10,.75); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .logo { font: 500 15px var(--display); letter-spacing: .04em; }
+  .logo b { color: var(--muted); font-weight: 500; }
+  .links { display: flex; gap: 6px; list-style: none; }
+  .links a { padding: 8px 14px; border-radius: 99px; font-size: 14px; color: var(--muted); transition: color .2s, background .2s; }
+  .links a:hover, .links a.active { color: var(--text); background: #1a1a1a; }
+  .menu { display: none; background: none; border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
+
+  /* hero */
+  #home { min-height: 100svh; display: grid; align-items: center; padding-top: 100px; }
+  .hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 48px; align-items: center; }
+  .hero h1 { font: 700 clamp(40px, 7.4vw, 86px)/1.02 var(--display); margin: 14px 0 22px; letter-spacing: -.01em; }
+  .hero .role { font-size: 18px; margin-bottom: 14px; }
+  .hero .role span { color: var(--muted); }
+  .quote { margin: 22px 0 30px; padding-left: 16px; border-left: 2px solid #444; color: #bdbdbd; font-style: italic; }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 99px;
+    font-weight: 600; font-size: 15px; border: 1px solid var(--text); transition: transform .2s, background .2s, color .2s;
+  }
+  .btn.solid { background: var(--text); color: #000; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.ghost:hover { background: var(--text); color: #000; }
+  .portrait { position: relative; justify-self: center; width: min(400px, 80vw); aspect-ratio: 1; }
+  .portrait::before {
+    content: ""; position: absolute; inset: -18%; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,.13), transparent 62%);
+  }
+  .portrait .ring { position: absolute; inset: -14px; border: 1px dashed #3a3a3a; border-radius: 50%; animation: spin 40s linear infinite; }
+  .portrait img { position: relative; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 1px solid #333; }
+  .badge {
+    position: absolute; bottom: 8%; left: -6%; background: #0d0d0d; border: 1px solid var(--line);
+    border-radius: 12px; padding: 10px 14px; font-size: 13px; display: flex; align-items: center; gap: 8px;
+  }
+  .badge i { width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px #fff; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 70px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .stat strong { display: block; font: 700 30px var(--display); }
+  .stat span { color: var(--muted); font-size: 14px; }
+
+  /* about */
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .about p + p { margin-top: 14px; }
+  .about .muted { color: var(--muted); }
+  .facts { list-style: none; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .facts li { display: flex; justify-content: space-between; gap: 16px; padding: 16px 20px; background: var(--card); }
+  .facts li + li { border-top: 1px solid var(--line); }
+  .facts span { color: var(--muted); }
+
+  /* studio */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 44px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px; transition: border-color .25s, transform .25s; }
+  .card:hover { border-color: #555; transform: translateY(-4px); }
+  .card .num { font: 500 13px var(--display); color: var(--muted); }
+  .card h3 { font: 600 20px var(--body); margin: 16px 0 8px; }
+  .card p { color: var(--muted); font-size: 15px; }
+  .price { margin-top: 18px; font-size: 14px; }
+  .price b { font: 700 18px var(--display); }
+
+  /* portfolio */
+  .tabs { display: inline-flex; gap: 4px; padding: 5px; margin-top: 30px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; }
+  .tabs button {
+    background: none; border: 0; color: var(--muted); font: 500 14px var(--body);
+    padding: 10px 22px; border-radius: 99px; cursor: pointer; transition: background .2s, color .2s;
+  }
+  .tabs button[aria-selected="true"] { background: var(--text); color: #000; }
+  .panel[hidden] { display: none; }
+  .project { padding: 0; overflow: hidden; }
+  .shot {
+    aspect-ratio: 16/10; background: #161616; border-bottom: 1px solid var(--line);
+    display: grid; place-items: center; position: relative; overflow: hidden;
+  }
+  .shot::before { content: ""; position: absolute; top: 12px; left: 14px; width: 42px; height: 8px; border-radius: 4px; background: repeating-linear-gradient(90deg, #333 0 8px, transparent 8px 16px); }
+  .shot strong { font: 700 clamp(20px, 3vw, 26px)/1.1 var(--display); text-align: center; padding: 0 20px; }
+  .project .body { padding: 22px 24px 26px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tags span { font-size: 12px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 99px; color: #bbb; }
+  .stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 44px; }
+  .stack div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 16px; text-align: center; font-weight: 500; }
+  .stack small { display: block; color: var(--muted); font-weight: 400; }
+
+  /* contact */
+  .contact { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; }
+  form { display: grid; gap: 12px; }
+  label { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+  input, textarea {
+    width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 13px 15px; color: var(--text); font: inherit; resize: vertical;
+  }
+  input:focus, textarea:focus { outline: none; border-color: #777; }
+  .socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .socials a { padding: 10px 16px; border: 1px solid var(--line); border-radius: 99px; font-size: 14px; transition: border-color .2s; }
+  .socials a:hover { border-color: #777; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 860px) {
+    section { padding: 80px 0; }
+    .hero, .about, .contact { grid-template-columns: 1fr; }
+    .portrait { order: -1; width: min(300px, 74vw); }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .menu { display: block; }
+    .links {
+      position: absolute; top: 62px; inset-inline: 0; flex-direction: column; padding: 10px 16px 16px;
+      background: #0a0a0a; border-bottom: 1px solid var(--line); display: none;
+    }
+    .links.open { display: flex; }
+    .tabs button { padding: 9px 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { animation: none !important; transition: none !important; }
+    .reveal, #intro * { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="intro" aria-hidden="true">
+  <div class="icons">
+    <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></span>
+    <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+    <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+  </div>
+  <h1>Welcome</h1>
+  <p>to my portfolio</p>
+</div>
+
+<header>
+  <nav class="wrap">
+    <a href="#home" class="logo">jerry<b>.olalo</b></a>
+    <button class="menu" aria-expanded="false" aria-controls="links">Menu</button>
+    <ul class="links" id="links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#studio">Studio</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section id="home">
+    <div class="wrap">
+      <div class="hero">
+        <div class="reveal">
+          <p class="eyebrow">Hello, I'm</p>
+          <h1>Jerry<br>Olalo</h1>
+          <p class="role">UI/UX Designer <span>&amp;</span> Front-End Developer</p>
+          <p class="lead">A 20-year-old designer and developer from Tawid, Candijay, Bohol. I design clean, simple interfaces and turn them into fast, responsive websites — mostly for small local businesses that deserve to be found online.</p>
+          <p class="quote">"Good design is quiet. It just works, and people feel it."</p>
+          <div class="btns">
+            <a href="#contact" class="btn solid">Hire me</a>
+            <a href="#portfolio" class="btn ghost">View projects &rarr;</a>
+          </div>
+        </div>
+        <div class="portrait reveal">
+          <div class="ring"></div>
+          <img src="assets/profile.jpg" alt="Black and white portrait of Jerry Olalo" width="800" height="800">
+          <div class="badge"><i></i> Open for projects</div>
+        </div>
+      </div>
+
+      <div class="stats reveal">
+        <div class="stat"><strong>20</strong><span>Years old</span></div>
+        <div class="stat"><strong>12+</strong><span>Projects designed</span></div>
+        <div class="stat"><strong>8</strong><span>Happy local clients</span></div>
+        <div class="stat"><strong>3</strong><span>Years of learning</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about">
+      <div class="reveal">
+        <p class="eyebrow">About me</p>
+        <h2>From a small town, building for the web.</h2>
+        <p>I grew up in Tawid, a quiet barangay in Candijay, Bohol, surrounded by mangroves, rice fields and the sea. I started out redesigning posters for school events, then got curious about how websites were made — and never stopped.</p>
+        <p class="muted">Today I run <strong>Olalo Studio</strong>, a one-person design and development service. I help sari-sari stores, cafés, resorts and student orgs look good online without paying big-city prices.</p>
+      </div>
+      <ul class="facts reveal">
+        <li><span>Name</span> Jerry Olalo</li>
+        <li><span>Age</span> 20</li>
+        <li><span>Hometown</span> Tawid, Candijay, Bohol</li>
+        <li><span>Focus</span> UI/UX · Front-end</li>
+        <li><span>Languages</span> Bisaya · Filipino · English</li>
+        <li><span>Status</span> Available for freelance</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="studio">
+    <div class="wrap">
+      <div class="center reveal">
+        <p class="eyebrow">Olalo Studio</p>
+        <h2>What I can do for you</h2>
+        <p class="lead">Design and development services for small businesses, startups and students. Simple pricing, honest timelines.</p>
+      </div>
+      <div class="cards">
+        <article class="card reveal">
+          <span class="num">01</span>
+          <h3>UI/UX Design</h3>
+          <p>Wireframes, user flows and high-fidelity mockups in Figma, tested with real users before a single line of code.</p>
+          <p class="price">from <b>₱3,500</b></p>
+        </article>
+        <article class="card reveal">
+          <span class="num">02</span>
+          <h3>Web Development</h3>
+          <p>Responsive, fast websites built with HTML, CSS, JavaScript and React. Hosted, launched and ready to share.</p>
+          <p class="price">from <b>₱6,000</b></p>
+        </article>
+        <article class="card reveal">
+          <span class="num">03</span>
+          <h3>Brand Identity</h3>
+          <p>Logos, color palettes and social media kits so your business looks the same everywhere people see it.</p>
+          <p class="price">from <b>₱2,500</b></p>
+        </article>
+        <article class="card reveal">
+          <span class="num">04</span>
+          <h3>Website Care</h3>
+          <p>Monthly updates, new menu items, photo swaps and small fixes so your site never goes stale.</p>
+          <p class="price"><b>₱800</b> / month</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <div class="wrap center">
+      <div class="reveal">
+        <p class="eyebrow">My work</p>
+        <h2>Portfolio Showcase</h2>
+        <p class="lead">Explore my journey through projects, certificates and the tools I use every day.</p>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" aria-controls="p-projects">Projects</button>
+          <button role="tab" aria-selected="false" aria-controls="p-certs">Certificates</button>
+          <button role="tab" aria-selected="false" aria-controls="p-stack">Tech Stack</button>
+        </div>
+      </div>
+
+      <div class="panel" id="p-projects" role="tabpanel">
+        <div class="cards" style="text-align:left">
+          <article class="card project">
+            <div class="shot"><strong>Tawid<br>Eats</strong></div>
+            <div class="body">
+              <h3>Tawid Eats</h3>
+              <p>Online menu and pre-order page for a family carinderia, so neighbors can order before lunch rush.</p>
+              <div class="tags"><span>UI/UX</span><span>HTML/CSS</span><span>JavaScript</span></div>
+            </div>
+          </article>
+          <article class="card project">
+            <div class="shot"><strong>Bohol<br>Trails</strong></div>
+            <div class="body">
+              <h3>Bohol Trails</h3>
+              <p>Travel guide concept for Candijay's hidden spots — Can-umantad Falls, the mangroves and Cadapdapan rice terraces.</p>
+              <div class="tags"><span>React</span><span>Figma</span><span>Responsive</span></div>
+            </div>
+          </article>
+          <article class="card project">
+            <div class="shot"><strong>Kape<br>Candijay</strong></div>
+            <div class="body">
+              <h3>Kape Candijay</h3>
+              <p>Brand identity and landing page for a small roadside coffee shop: logo, menu board and Instagram kit.</p>
+              <div class="tags"><span>Branding</span><span>Landing page</span></div>
+            </div>
+          </article>
+          <article class="card project">
+            <div class="shot"><strong>Study<br>Buddy</strong></div>
+            <div class="body">
+              <h3>Study Buddy</h3>
+              <p>Mobile app UI for students to track deadlines and group tasks, designed and tested with classmates.</p>
+              <div class="tags"><span>Mobile UI</span><span>Prototype</span><span>User testing</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="panel" id="p-certs" role="tabpanel" hidden>
+        <div class="cards" style="text-align:left">
+          <article class="card"><span class="num">2026</span><h3>Responsive Web Design</h3><p>freeCodeCamp certification covering semantic HTML, CSS Flexbox and Grid.</p></article>
+          <article class="card"><span class="num">2025</span><h3>Foundations of UX Design</h3><p>Online course on user research, personas, wireframing and usability testing.</p></article>
+          <article class="card"><span class="num">2025</span><h3>JavaScript Algorithms</h3><p>Problem solving and core JavaScript concepts for interactive websites.</p></article>
+          <article class="card"><span class="num">2024</span><h3>Academic Excellence</h3><p>Recognized for consistent academic performance in senior high school.</p></article>
+        </div>
+      </div>
+
+      <div class="panel" id="p-stack" role="tabpanel" hidden>
+        <div class="stack">
+          <div>HTML<small>Markup</small></div>
+          <div>CSS<small>Styling</small></div>
+          <div>JavaScript<small>Interactivity</small></div>
+          <div>React<small>Framework</small></div>
+          <div>Tailwind<small>Utility CSS</small></div>
+          <div>Figma<small>Design</small></div>
+          <div>Git &amp; GitHub<small>Version control</small></div>
+          <div>Canva<small>Graphics</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <div class="reveal">
+        <p class="eyebrow">Contact</p>
+        <h2>Let's build something together.</h2>
+        <p class="lead">Have a project, a small business that needs a website, or just want to say hi? Send me a message and I'll get back to you within a day.</p>
+        <div class="socials">
+          <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://facebook.com/" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+        <p class="lead" style="margin-top:26px">📍 Tawid, Candijay, Bohol, Philippines</p>
+      </div>
+      <form class="reveal" id="form">
+        <label>Name <input name="name" required autocomplete="name"></label>
+        <label>Email <input name="email" type="email" required autocomplete="email"></label>
+        <label>Message <textarea name="message" rows="5" required></textarea></label>
+        <button class="btn solid" type="submit" style="justify-self:start;cursor:pointer">Send message</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olalo · Olalo Studio</span>
+    <span>Made in Bohol 🇵🇭</span>
+  </div>
+</footer>
+
+<script>
+  // change this to the real inbox before submitting
+  const EMAIL = "your.email@example.com";
+
+  const intro = document.getElementById("intro");
+  setTimeout(() => intro.classList.add("done"), 2200);
+  intro.addEventListener("click", () => intro.classList.add("done"));
+
+  const menu = document.querySelector(".menu"), links = document.getElementById("links");
+  menu.addEventListener("click", () => menu.setAttribute("aria-expanded", links.classList.toggle("open")));
+  links.addEventListener("click", e => { if (e.target.tagName === "A") links.classList.remove("open"); });
+
+  document.querySelectorAll('[role="tab"]').forEach(tab => tab.addEventListener("click", () => {
+    document.querySelectorAll('[role="tab"]').forEach(t => {
+      t.setAttribute("aria-selected", t === tab);
+      document.getElementById(t.getAttribute("aria-controls")).hidden = t !== tab;
+    });
+  }));
+
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: .15 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  const navLinks = [...links.querySelectorAll("a")];
+  const spy = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) navLinks.forEach(a => a.classList.toggle("active", a.hash === "#" + e.target.id));
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  document.querySelectorAll("main section").forEach(s => spy.observe(s));
+
+  document.getElementById("form").addEventListener("submit", e => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    location.href = `mailto:${EMAIL}?subject=${encodeURIComponent("Project inquiry from " + f.get("name"))}&body=${encodeURIComponent(f.get("message") + "\n\n— " + f.get("name") + " (" + f.get("email") + ")")}`;
+  });
+</script>
+</body>
+</html>
