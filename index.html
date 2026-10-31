@@ -87,19 +87,54 @@
   .btn.solid { background: var(--text); color: #000; }
   .btn:hover { transform: translateY(-2px); }
   .btn.ghost:hover { background: var(--text); color: #000; }
-  .portrait { position: relative; justify-self: center; width: min(400px, 80vw); aspect-ratio: 1; }
+  .portrait { position: relative; justify-self: center; width: min(430px, 86vw); aspect-ratio: 4/5; perspective: 900px; }
   .portrait::before {
-    content: ""; position: absolute; inset: -18%; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,.13), transparent 62%);
+    content: ""; position: absolute; inset: -12% -20%;
+    background: radial-gradient(ellipse at 45% 35%, rgba(255,255,255,.12), transparent 60%);
+    animation: breathe 6s ease-in-out infinite;
   }
-  .portrait .ring { position: absolute; inset: -14px; border: 1px dashed #3a3a3a; border-radius: 50%; animation: spin 40s linear infinite; }
-  .portrait img { position: relative; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 1px solid #333; }
+  .portrait .frame { position: relative; width: 100%; height: 100%; transition: transform .4s ease-out; transform-style: preserve-3d; }
+  .portrait img {
+    width: 100%; height: 100%; object-fit: cover;
+    -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 46%, #000 62%, transparent 100%);
+            mask-image: radial-gradient(ellipse 50% 50% at 50% 46%, #000 62%, transparent 100%);
+    animation: drift 14s ease-in-out infinite alternate;
+  }
   .badge {
-    position: absolute; bottom: 8%; left: -6%; background: #0d0d0d; border: 1px solid var(--line);
-    border-radius: 12px; padding: 10px 14px; font-size: 13px; display: flex; align-items: center; gap: 8px;
+    position: absolute; bottom: 14%; left: -4%; background: rgba(13,13,13,.85); backdrop-filter: blur(8px);
+    border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px;
+    display: flex; align-items: center; gap: 8px; animation: float 5s ease-in-out infinite;
   }
-  .badge i { width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px #fff; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .badge i { width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px #fff; animation: pulse 2s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .55; scale: 1.06; } }
+  @keyframes drift { from { scale: 1; } to { scale: 1.05; translate: 0 -8px; } }
+  @keyframes float { 50% { translate: 0 -8px; } }
+  @keyframes pulse { 50% { opacity: .35; } }
+
+  /* hero text motion */
+  .hero h1 .line { display: block; overflow: hidden; padding-bottom: .06em; }
+  .hero h1 .line > span { display: inline-block; translate: 0 110%; }
+  body.ready .hero h1 .line > span { animation: rise 1s cubic-bezier(.2,.8,.2,1) forwards; }
+  body.ready .hero h1 .line:nth-child(2) > span { animation-delay: .12s; }
+  @keyframes rise { to { translate: 0 0; } }
+  #typed { border-right: 2px solid var(--text); padding-right: 3px; animation: caret 1s step-end infinite; }
+  @keyframes caret { 50% { border-color: transparent; } }
+
+  /* marquee */
+  .marquee { border-block: 1px solid var(--line); background: #0d0d0d; overflow: hidden; padding: 18px 0; }
+  .marquee div { display: flex; width: max-content; animation: scroll 28s linear infinite; }
+  .marquee span { font: 500 clamp(16px, 2.4vw, 22px) var(--display); padding-right: 40px; white-space: nowrap; color: #d0d0d0; }
+  .marquee span:nth-child(even) { color: #555; }
+  @keyframes scroll { to { translate: -50% 0; } }
+
+  /* cursor light + scroll progress */
+  .glow {
+    position: fixed; left: 0; top: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; z-index: 0;
+    border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .4s;
+    background: radial-gradient(circle, rgba(255,255,255,.07), transparent 65%);
+  }
+  .progress { position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%; background: var(--text); transform-origin: left; scale: 0 1; }
+  main, footer { position: relative; z-index: 1; }
 
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 70px; }
   .stat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
@@ -162,13 +197,17 @@
   footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted); font-size: 14px; }
   footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
-  .reveal.in { opacity: 1; transform: none; }
+  /* uses `translate`, not `transform`, so hover transforms still work after the reveal */
+  .reveal { opacity: 0; }
+  .reveal.in { animation: reveal .8s var(--d, 0s) cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes reveal { from { opacity: 0; translate: 0 28px; } to { opacity: 1; translate: 0 0; } }
+  .panel:not([hidden]) { animation: reveal .5s ease both; }
+  .card { background: radial-gradient(360px circle at var(--mx, -100%) var(--my, -100%), rgba(255,255,255,.07), transparent 45%), var(--card); }
 
   @media (max-width: 860px) {
     section { padding: 80px 0; }
     .hero, .about, .contact { grid-template-columns: 1fr; }
-    .portrait { order: -1; width: min(300px, 74vw); }
+    .portrait { order: -1; width: min(320px, 78vw); }
     .stats { grid-template-columns: repeat(2, 1fr); }
     .menu { display: block; }
     .links {
@@ -181,6 +220,7 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before { animation: none !important; transition: none !important; }
     .reveal, #intro * { opacity: 1; transform: none; }
+    .hero h1 .line > span { translate: none; }
   }
 </style>
 </head>
@@ -208,7 +248,9 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
+  <div class="progress"></div>
 </header>
+<div class="glow"></div>
 
 <main>
   <section id="home">
@@ -216,8 +258,8 @@
       <div class="hero">
         <div class="reveal">
           <p class="eyebrow">Hello, I'm</p>
-          <h1>Jerry<br>Olalo</h1>
-          <p class="role">UI/UX Designer <span>&amp;</span> Front-End Developer</p>
+          <h1><span class="line"><span>Jerry</span></span><span class="line"><span>Olalo</span></span></h1>
+          <p class="role"><span>I'm a</span> <b id="typed">UI/UX Designer</b></p>
           <p class="lead">A 20-year-old designer and developer from Tawid, Candijay, Bohol. I design clean, simple interfaces and turn them into fast, responsive websites — mostly for small local businesses that deserve to be found online.</p>
           <p class="quote">"Good design is quiet. It just works, and people feel it."</p>
           <div class="btns">
@@ -226,20 +268,26 @@
           </div>
         </div>
         <div class="portrait reveal">
-          <div class="ring"></div>
-          <img src="assets/profile.jpg" alt="Black and white portrait of Jerry Olalo" width="800" height="800">
+          <div class="frame"><img src="assets/profile.jpg" alt="Black and white portrait of Jerry Olalo in a suit" width="960" height="1200"></div>
           <div class="badge"><i></i> Open for projects</div>
         </div>
       </div>
 
-      <div class="stats reveal">
-        <div class="stat"><strong>20</strong><span>Years old</span></div>
-        <div class="stat"><strong>12+</strong><span>Projects designed</span></div>
-        <div class="stat"><strong>8</strong><span>Happy local clients</span></div>
-        <div class="stat"><strong>3</strong><span>Years of learning</span></div>
+      <div class="stats">
+        <div class="stat"><strong data-to="20">20</strong><span>Years old</span></div>
+        <div class="stat"><strong data-to="12" data-suffix="+">12+</strong><span>Projects designed</span></div>
+        <div class="stat"><strong data-to="8">8</strong><span>Happy local clients</span></div>
+        <div class="stat"><strong data-to="3">3</strong><span>Years of learning</span></div>
       </div>
     </div>
   </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div>
+      <span>UI/UX Design</span><span>✦</span><span>Web Development</span><span>✦</span><span>Brand Identity</span><span>✦</span><span>Made in Bohol</span><span>✦</span>
+      <span>UI/UX Design</span><span>✦</span><span>Web Development</span><span>✦</span><span>Brand Identity</span><span>✦</span><span>Made in Bohol</span><span>✦</span>
+    </div>
+  </div>
 
   <section id="about">
     <div class="wrap about">
@@ -404,9 +452,78 @@
   // change this to the real inbox before submitting
   const EMAIL = "your.email@example.com";
 
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = matchMedia("(hover: hover)").matches;
+
+  // intro → then start everything else
   const intro = document.getElementById("intro");
-  setTimeout(() => intro.classList.add("done"), 2200);
-  intro.addEventListener("click", () => intro.classList.add("done"));
+  let started = false;
+  function start() {
+    if (started) return;
+    started = true;
+    intro.classList.add("done");
+    document.body.classList.add("ready");
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+    if (!still) typeRoles();
+  }
+  setTimeout(start, still ? 0 : 2200);
+  intro.addEventListener("click", start);
+
+  // typing roles
+  const typed = document.getElementById("typed");
+  const roles = ["UI/UX Designer", "Front-End Developer", "Brand Designer", "Problem Solver"];
+  async function typeRoles() {
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    for (let i = 0; ; i = (i + 1) % roles.length) {
+      for (let n = 1; n <= roles[i].length; n++) { typed.textContent = roles[i].slice(0, n); await wait(70); }
+      await wait(1800);
+      for (let n = roles[i].length; n >= 0; n--) { typed.textContent = roles[i].slice(0, n); await wait(35); }
+      await wait(300);
+    }
+  }
+
+  // stagger grid children
+  document.querySelectorAll(".cards, .stack, .stats").forEach(g =>
+    [...g.children].forEach((c, i) => { c.classList.add("reveal"); c.style.setProperty("--d", i * 90 + "ms"); }));
+
+  // count up stats
+  function countUp(el) {
+    const to = +el.dataset.to, suffix = el.dataset.suffix || "", t0 = performance.now();
+    (function tick(t) {
+      const p = Math.min((t - t0) / 1400, 1);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+
+  if (canHover && !still) {
+    // cursor light
+    const glow = document.querySelector(".glow");
+    addEventListener("pointermove", e => {
+      glow.style.opacity = 1;
+      glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    });
+    // spotlight on cards
+    document.querySelectorAll(".card").forEach(c => c.addEventListener("pointermove", e => {
+      const r = c.getBoundingClientRect();
+      c.style.setProperty("--mx", e.clientX - r.left + "px");
+      c.style.setProperty("--my", e.clientY - r.top + "px");
+    }));
+    // portrait tilts toward the cursor
+    const portrait = document.querySelector(".portrait"), frame = portrait.querySelector(".frame");
+    portrait.addEventListener("pointermove", e => {
+      const r = portrait.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      frame.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+    });
+    portrait.addEventListener("pointerleave", () => frame.style.transform = "");
+  }
+
+  // scroll progress
+  const bar = document.querySelector(".progress");
+  addEventListener("scroll", () => {
+    bar.style.scale = `${scrollY / (document.documentElement.scrollHeight - innerHeight)} 1`;
+  }, { passive: true });
 
   const menu = document.querySelector(".menu"), links = document.getElementById("links");
   menu.addEventListener("click", () => menu.setAttribute("aria-expanded", links.classList.toggle("open")));
@@ -419,10 +536,14 @@
     });
   }));
 
+  // observed from start(), after the intro
   const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    if (!e.isIntersecting) return;
+    e.target.classList.add("in");
+    const n = e.target.querySelector("[data-to]");
+    if (n && !still) countUp(n);
+    io.unobserve(e.target);
   }), { threshold: .15 });
-  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
   const navLinks = [...links.querySelectorAll("a")];
   const spy = new IntersectionObserver(entries => entries.forEach(e => {
